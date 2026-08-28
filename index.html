@@ -1,0 +1,3240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6b4226">
+<title>ChallaGPS | Encuesta Ciudadana</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+  --cafe:#6b4226;
+  --cafe2:#8b5e3c;
+  --cafe3:#c89b6d;
+  --crema:#f8f1e7;
+  --blanco:#fff;
+  --verde:#38761d;
+  --verde2:#4f8f29;
+  --texto:#3f3025;
+  --gris:#786d64;
+  --borde:#e4d5c4;
+  --rojo:#b42318;
+  --sombra:0 12px 35px rgba(76,48,28,.10);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--crema);
+  color:var(--texto);
+  line-height:1.5;
+}
+
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--borde);
+}
+
+.nav{
+  width:min(1200px,94%);
+  height:72px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:23px;
+  font-weight:900;
+  color:var(--cafe);
+}
+
+.logo-icon{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:linear-gradient(135deg,var(--cafe),var(--cafe3));
+}
+
+.logo span{
+  color:var(--verde);
+}
+
+.nav-buttons{
+  display:flex;
+  gap:9px;
+}
+
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:11px 17px;
+  font-weight:800;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-cafe{
+  background:var(--cafe);
+  color:#fff;
+}
+
+.btn-cafe:hover{
+  background:#4d2d19;
+}
+
+.btn-outline{
+  background:#fff;
+  color:var(--cafe);
+  border:1px solid var(--borde);
+}
+
+.hero{
+  background:
+  linear-gradient(110deg,rgba(78,45,24,.94),rgba(107,66,38,.83)),
+  url("https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1800&q=80")
+  center/cover;
+  color:#fff;
+  min-height:510px;
+  display:flex;
+  align-items:center;
+}
+
+.hero-content{
+  width:min(1100px,92%);
+  margin:auto;
+  padding:70px 0;
+}
+
+.badge{
+  display:inline-block;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.25);
+  padding:8px 14px;
+  border-radius:50px;
+  margin-bottom:18px;
+  font-size:14px;
+}
+
+.hero h1{
+  max-width:800px;
+  font-size:clamp(40px,7vw,70px);
+  line-height:1;
+  letter-spacing:-2px;
+  margin-bottom:20px;
+}
+
+.hero h1 span{
+  color:#e8c39e;
+}
+
+.hero p{
+  max-width:680px;
+  color:#f7eadc;
+  font-size:18px;
+  line-height:1.7;
+  margin-bottom:28px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.hero-actions button{
+  padding:14px 21px;
+}
+
+.btn-light{
+  background:#fff;
+  color:var(--cafe);
+}
+
+.container{
+  width:min(1100px,92%);
+  margin:auto;
+}
+
+section{
+  padding:75px 0;
+}
+
+.section-title{
+  color:var(--cafe);
+  font-size:clamp(28px,4vw,42px);
+  margin-bottom:10px;
+}
+
+.section-text{
+  color:var(--gris);
+  max-width:700px;
+}
+
+.info-grid{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.info-card{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:var(--sombra);
+}
+
+.info-icon{
+  font-size:30px;
+  margin-bottom:12px;
+}
+
+.info-card h3{
+  margin-bottom:7px;
+  color:var(--cafe);
+}
+
+.info-card p{
+  color:var(--gris);
+  font-size:14px;
+}
+
+.survey-section{
+  background:#fff;
+}
+
+.survey-wrapper{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:25px;
+  align-items:start;
+}
+
+.progress-card{
+  background:var(--crema);
+  border:1px solid var(--borde);
+  border-radius:18px;
+  padding:22px;
+  position:sticky;
+  top:95px;
+}
+
+.progress-card h3{
+  color:var(--cafe);
+  margin-bottom:15px;
+}
+
+.progress-number{
+  font-size:38px;
+  font-weight:900;
+  color:var(--verde);
+}
+
+.progress-bg{
+  height:9px;
+  background:#e5d8ca;
+  border-radius:20px;
+  overflow:hidden;
+  margin:15px 0;
+}
+
+.progress-fill{
+  height:100%;
+  width:5%;
+  background:linear-gradient(90deg,var(--cafe),var(--cafe3));
+  transition:.3s;
+}
+
+.progress-card p{
+  color:var(--gris);
+  font-size:13px;
+}
+
+.question{
+  display:none;
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:var(--sombra);
+}
+
+.question.active{
+  display:block;
+}
+
+.question-number{
+  color:var(--cafe2);
+  font-size:13px;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.question h3{
+  color:var(--cafe);
+  font-size:23px;
+  margin-bottom:20px;
+}
+
+.options{
+  display:grid;
+  gap:10px;
+}
+
+.option{
+  border:1px solid var(--borde);
+  border-radius:12px;
+  padding:13px;
+  transition:.2s;
+  background:#fff;
+}
+
+.option:hover{
+  border-color:var(--cafe3);
+  background:#fffaf5;
+}
+
+.option label{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  cursor:pointer;
+}
+
+.option input{
+  accent-color:var(--cafe);
+}
+
+textarea,
+.text-input{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--borde);
+  border-radius:11px;
+  outline:none;
+  background:#fff;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+textarea:focus,
+.text-input:focus{
+  border-color:var(--cafe);
+  box-shadow:0 0 0 3px rgba(107,66,38,.10);
+}
+
+.question-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:25px;
+}
+
+.question-actions .right{
+  margin-left:auto;
+}
+
+.required{
+  color:var(--rojo);
+}
+
+.success{
+  display:none;
+  text-align:center;
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:20px;
+  padding:45px 25px;
+  box-shadow:var(--sombra);
+}
+
+.success.active{
+  display:block;
+}
+
+.success-icon{
+  font-size:55px;
+  margin-bottom:15px;
+}
+
+.success h2{
+  color:var(--cafe);
+  margin-bottom:10px;
+}
+
+.success p{
+  color:var(--gris);
+  margin-bottom:20px;
+}
+
+.public-results{
+  background:#f4eadf;
+}
+
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-top:25px;
+}
+
+.result-card{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:16px;
+  padding:20px;
+}
+
+.result-card strong{
+  display:block;
+  font-size:28px;
+  color:var(--cafe);
+}
+
+.result-card span{
+  color:var(--gris);
+  font-size:13px;
+}
+
+.comments{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.comment-box,
+.comment-list{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:18px;
+  padding:22px;
+}
+
+.comment-box h3,
+.comment-list h3{
+  color:var(--cafe);
+  margin-bottom:15px;
+}
+
+.comment-box .btn{
+  margin-top:12px;
+}
+
+.comment-item{
+  padding:14px 0;
+  border-bottom:1px solid var(--borde);
+}
+
+.comment-item:last-child{
+  border-bottom:0;
+}
+
+.comment-item strong{
+  color:var(--cafe);
+}
+
+.comment-item p{
+  color:var(--gris);
+  margin-top:4px;
+}
+
+.admin-section{
+  background:#fff;
+}
+
+.login-box{
+  max-width:450px;
+  margin:30px auto;
+  background:var(--crema);
+  border:1px solid var(--borde);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:var(--sombra);
+}
+
+.login-box h3{
+  color:var(--cafe);
+  margin-bottom:15px;
+}
+
+.login-box input{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--borde);
+  border-radius:10px;
+  margin-bottom:12px;
+}
+
+.admin-panel{
+  display:none;
+}
+
+.admin-panel.active{
+  display:block;
+}
+
+.admin-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.admin-top h2{
+  color:var(--cafe);
+}
+
+.admin-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.admin-stat{
+  background:var(--crema);
+  border:1px solid var(--borde);
+  border-radius:16px;
+  padding:20px;
+}
+
+.admin-stat strong{
+  display:block;
+  font-size:30px;
+  color:var(--cafe);
+}
+
+.admin-stat span{
+  color:var(--gris);
+  font-size:13px;
+}
+
+.charts{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.chart-box{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:18px;
+  padding:20px;
+  min-height:330px;
+}
+
+.chart-box h3{
+  color:var(--cafe);
+  margin-bottom:15px;
+}
+
+.answers-table{
+  margin-top:25px;
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:18px;
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:750px;
+}
+
+th,td{
+  padding:12px;
+  border-bottom:1px solid var(--borde);
+  text-align:left;
+  font-size:13px;
+}
+
+th{
+  background:var(--crema);
+  color:var(--cafe);
+}
+
+footer{
+  background:#332116;
+  color:#fff;
+  padding:45px 0 25px;
+}
+
+.footer-grid{
+  width:min(1100px,92%);
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:30px;
+}
+
+.footer-title{
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+footer p,
+footer a{
+  color:#cdbfb4;
+  font-size:14px;
+}
+
+.footer-links{
+  display:grid;
+  gap:7px;
+}
+
+.copyright{
+  width:min(1100px,92%);
+  margin:30px auto 0;
+  padding-top:18px;
+  border-top:1px solid #513a2b;
+  color:#a99485;
+  font-size:12px;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#332116;
+  color:#fff;
+  padding:14px 18px;
+  border-radius:12px;
+  opacity:0;
+  transform:translateY(15px);
+  pointer-events:none;
+  transition:.3s;
+  z-index:5000;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media(max-width:850px){
+
+  .info-grid,
+  .comments,
+  .charts{
+    grid-template-columns:1fr;
+  }
+
+  .result-grid,
+  .admin-stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .survey-wrapper{
+    grid-template-columns:1fr;
+  }
+
+  .progress-card{
+    position:static;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+
+  .nav-buttons .btn-outline{
+    display:none;
+  }
+
+  .hero{
+    min-height:580px;
+  }
+
+  .hero h1{
+    font-size:45px;
+  }
+
+  .info-grid{
+    grid-template-columns:1fr;
+  }
+
+  .result-grid,
+  .admin-stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .question{
+    padding:20px;
+  }
+
+  .question h3{
+    font-size:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<nav class="nav">
+
+  <div class="logo">
+    <div class="logo-icon">📍</div>
+    Challa<span>GPS</span>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-outline"
+      onclick="document.getElementById('encuesta').scrollIntoView({behavior:'smooth'})">
+      Encuesta
+    </button>
+
+    <button class="btn btn-cafe"
+      onclick="document.getElementById('administracion').scrollIntoView({behavior:'smooth'})">
+      Administración
+    </button>
+  </div>
+
+</nav>
+</header>
+
+
+<main>
+
+<section class="hero">
+
+<div class="hero-content">
+
+  <div class="badge">
+    🇧🇴 Proyecto para Challapata
+  </div>
+
+  <h1>
+    Queremos conocer tu opinión sobre
+    <span>ChallaGPS.</span>
+  </h1>
+
+  <p>
+    Estamos desarrollando una plataforma web para que las personas puedan
+    encontrar hoteles, restaurantes, tiendas, servicios y negocios de
+    Challapata en un solo lugar.
+  </p>
+
+  <div class="hero-actions">
+
+    <button class="btn btn-light"
+      onclick="document.getElementById('encuesta').scrollIntoView({behavior:'smooth'})">
+      📝 Responder encuesta
+    </button>
+
+    <button class="btn btn-outline"
+      onclick="document.getElementById('idea').scrollIntoView({behavior:'smooth'})">
+      💬 Dar mi opinión
+    </button>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<section>
+
+<div class="container">
+
+  <h2 class="section-title">
+    Tu opinión nos ayuda
+  </h2>
+
+  <p class="section-text">
+    Esta encuesta es breve y nos permitirá saber si una plataforma como
+    ChallaGPS sería útil para la población de Challapata.
+  </p>
+
+  <div class="info-grid">
+
+    <div class="info-card">
+      <div class="info-icon">📍</div>
+      <h3>Encuentra negocios</h3>
+      <p>
+        Busca fácilmente negocios, hoteles, restaurantes y servicios.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon">⭐</div>
+      <h3>Opiniones reales</h3>
+      <p>
+        Las personas podrían valorar y comentar sus experiencias.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon">🗺️</div>
+      <h3>Mapa de Challapata</h3>
+      <p>
+        Consulta dónde están ubicados los negocios directamente desde un mapa.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<section id="encuesta" class="survey-section">
+
+<div class="container">
+
+  <h2 class="section-title">
+    Encuesta ChallaGPS
+  </h2>
+
+  <p class="section-text">
+    Responde las siguientes 20 preguntas. Solo te tomará unos minutos.
+  </p>
+
+  <br>
+
+  <div class="survey-wrapper">
+
+    <div class="progress-card">
+
+      <h3>Progreso</h3>
+
+      <div class="progress-number">
+        <span id="currentQuestion">1</span>/20
+      </div>
+
+      <div class="progress-bg">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <p>
+        Completa las preguntas para conocer qué piensa la población
+        sobre nuestra propuesta.
+      </p>
+
+    </div>
+
+
+    <div>
+
+      <form id="surveyForm">
+
+
+        <!-- PREGUNTA 1 -->
+
+        <div class="question active" data-question="1">
+
+          <div class="question-number">Pregunta 1 de 20</div>
+
+          <h3>
+            ¿Vives actualmente en Challapata?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option">
+              <label>
+                <input type="radio" name="q1" value="Sí" required>
+                Sí
+              </label>
+            </div>
+
+            <div class="option">
+              <label>
+                <input type="radio" name="q1" value="No">
+                No
+              </label>
+            </div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-cafe"
+              onclick="nextQuestion()">
+              Siguiente →
+            </button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 2 -->
+
+        <div class="question" data-question="2">
+
+          <div class="question-number">Pregunta 2 de 20</div>
+
+          <h3>
+            ¿Con qué frecuencia buscas negocios o servicios en Challapata?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q2" value="Todos los días" required>
+              Todos los días
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q2" value="Varias veces por semana">
+              Varias veces por semana
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q2" value="Algunas veces al mes">
+              Algunas veces al mes
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q2" value="Casi nunca">
+              Casi nunca
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline"
+              onclick="prevQuestion()">← Atrás</button>
+
+            <button type="button" class="btn btn-cafe"
+              onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 3 -->
+
+        <div class="question" data-question="3">
+
+          <div class="question-number">Pregunta 3 de 20</div>
+
+          <h3>
+            ¿Cómo encuentras actualmente un negocio que no conoces?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q3" value="Facebook/Instagram" required>
+              Facebook o Instagram
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q3" value="Google">
+              Google
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q3" value="Recomendación">
+              Recomendación de familiares o amigos
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q3" value="Preguntando en la calle">
+              Preguntando a otras personas
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 4 -->
+
+        <div class="question" data-question="4">
+
+          <div class="question-number">Pregunta 4 de 20</div>
+
+          <h3>
+            ¿Te gustaría tener una plataforma web exclusiva para negocios de Challapata?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q4" value="Sí" required>
+              Sí
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q4" value="Tal vez">
+              Tal vez
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q4" value="No">
+              No
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 5 -->
+
+        <div class="question" data-question="5">
+
+          <div class="question-number">Pregunta 5 de 20</div>
+
+          <h3>
+            ¿Qué tan útil te parecería ChallaGPS?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q5" value="Muy útil" required>
+              ⭐⭐⭐⭐⭐ Muy útil
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q5" value="Útil">
+              ⭐⭐⭐⭐ Útil
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q5" value="Poco útil">
+              ⭐⭐ Poco útil
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q5" value="Nada útil">
+              ⭐ Nada útil
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 6 -->
+
+        <div class="question" data-question="6">
+
+          <div class="question-number">Pregunta 6 de 20</div>
+
+          <h3>
+            ¿Qué categoría buscarías más?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q6" value="Restaurantes" required>
+              🍽️ Restaurantes
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q6" value="Hoteles">
+              🏨 Hoteles
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q6" value="Tiendas">
+              🛒 Tiendas
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q6" value="Salud">
+              🏥 Salud
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q6" value="Servicios">
+              🔧 Servicios
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 7 -->
+
+        <div class="question" data-question="7">
+
+          <div class="question-number">Pregunta 7 de 20</div>
+
+          <h3>
+            ¿Qué información te gustaría encontrar de un negocio?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q7" value="Ubicación" required>
+              📍 Ubicación
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q7" value="Horarios">
+              🕒 Horarios
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q7" value="Precios">
+              💰 Precios
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q7" value="Fotos">
+              📷 Fotos
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q7" value="Todas">
+              ⭐ Todas las anteriores
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 8 -->
+
+        <div class="question" data-question="8">
+
+          <div class="question-number">Pregunta 8 de 20</div>
+
+          <h3>
+            ¿Consideras importante que los negocios tengan fotos?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q8" value="Muy importante" required>
+              Muy importante
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q8" value="Importante">
+              Importante
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q8" value="Poco importante">
+              Poco importante
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q8" value="No es importante">
+              No es importante
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 9 -->
+
+        <div class="question" data-question="9">
+
+          <div class="question-number">Pregunta 9 de 20</div>
+
+          <h3>
+            ¿Te gustaría ver fotografías en 360° de los negocios?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q9" value="Sí" required>
+              Sí, sería muy interesante
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q9" value="Tal vez">
+              Tal vez
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q9" value="No">
+              No lo considero necesario
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 10 -->
+
+        <div class="question" data-question="10">
+
+          <div class="question-number">Pregunta 10 de 20</div>
+
+          <h3>
+            ¿Te gustaría poder leer reseñas de otros clientes?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q10" value="Sí" required>
+              Sí
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q10" value="Tal vez">
+              Tal vez
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q10" value="No">
+              No
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 11 -->
+
+        <div class="question" data-question="11">
+
+          <div class="question-number">Pregunta 11 de 20</div>
+
+          <h3>
+            ¿Te gustaría dejar tu propia reseña después de visitar un negocio?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q11" value="Sí" required>
+              Sí
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q11" value="Tal vez">
+              Tal vez
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q11" value="No">
+              No
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 12 -->
+
+        <div class="question" data-question="12">
+
+          <div class="question-number">Pregunta 12 de 20</div>
+
+          <h3>
+            ¿Qué tan importante sería para ti conocer la calificación de un negocio?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q12" value="Muy importante" required>
+              Muy importante
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q12" value="Importante">
+              Importante
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q12" value="Poco importante">
+              Poco importante
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q12" value="Nada importante">
+              Nada importante
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 13 -->
+
+        <div class="question" data-question="13">
+
+          <div class="question-number">Pregunta 13 de 20</div>
+
+          <h3>
+            En restaurantes, ¿qué opción te gustaría encontrar?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q13" value="Menú y precios" required>
+              📋 Menú y precios
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q13" value="Delivery">
+              🛵 Información sobre delivery
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q13" value="Reservas">
+              🪑 Reservar mesa
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q13" value="Todas">
+              ⭐ Todas las anteriores
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 14 -->
+
+        <div class="question" data-question="14">
+
+          <div class="question-number">Pregunta 14 de 20</div>
+
+          <h3>
+            ¿Usarías una opción para saber si un restaurante tiene delivery?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q14" value="Sí" required>
+              Sí, me sería útil
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q14" value="Tal vez">
+              Tal vez
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q14" value="No">
+              No
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 15 -->
+
+        <div class="question" data-question="15">
+
+          <div class="question-number">Pregunta 15 de 20</div>
+
+          <h3>
+            ¿Te gustaría contactar directamente con los negocios desde ChallaGPS?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q15" value="Sí" required>
+              Sí
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q15" value="Tal vez">
+              Tal vez
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q15" value="No">
+              No
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 16 -->
+
+        <div class="question" data-question="16">
+
+          <div class="question-number">Pregunta 16 de 20</div>
+
+          <h3>
+            ¿Qué dispositivo usarías principalmente para entrar a ChallaGPS?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q16" value="Celular" required>
+              📱 Celular
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q16" value="Computadora">
+              💻 Computadora
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q16" value="Tablet">
+              📲 Tablet
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 17 -->
+
+        <div class="question" data-question="17">
+
+          <div class="question-number">Pregunta 17 de 20</div>
+
+          <h3>
+            ¿Con qué frecuencia crees que usarías ChallaGPS?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q17" value="Diariamente" required>
+              Todos los días
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q17" value="Semanalmente">
+              Varias veces por semana
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q17" value="Mensualmente">
+              Algunas veces al mes
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q17" value="Ocasionalmente">
+              Solo ocasionalmente
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 18 -->
+
+        <div class="question" data-question="18">
+
+          <div class="question-number">Pregunta 18 de 20</div>
+
+          <h3>
+            ¿Crees que ChallaGPS ayudaría a los negocios locales a conseguir más clientes?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q18" value="Sí" required>
+              Sí
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q18" value="Tal vez">
+              Tal vez
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q18" value="No">
+              No
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 19 -->
+
+        <div class="question" data-question="19">
+
+          <div class="question-number">Pregunta 19 de 20</div>
+
+          <h3>
+            ¿Recomendarías una plataforma como ChallaGPS a otras personas?
+            <span class="required">*</span>
+          </h3>
+
+          <div class="options">
+
+            <div class="option"><label>
+              <input type="radio" name="q19" value="Definitivamente sí" required>
+              Definitivamente sí
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q19" value="Probablemente sí">
+              Probablemente sí
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q19" value="No estoy seguro">
+              No estoy seguro/a
+            </label></div>
+
+            <div class="option"><label>
+              <input type="radio" name="q19" value="No">
+              No
+            </label></div>
+
+          </div>
+
+          <div class="question-actions">
+            <button type="button" class="btn btn-outline" onclick="prevQuestion()">← Atrás</button>
+            <button type="button" class="btn btn-cafe" onclick="nextQuestion()">Siguiente →</button>
+          </div>
+
+        </div>
+
+
+        <!-- PREGUNTA 20 -->
+
+        <div class="question" data-question="20">
+
+          <div class="question-number">Pregunta 20 de 20</div>
+
+          <h3>
+            ¿Qué sugerencia darías para mejorar ChallaGPS?
+          </h3>
+
+          <textarea
+            id="q20"
+            name="q20"
+            placeholder="Escribe libremente tu opinión..."
+          ></textarea>
+
+          <div class="question-actions">
+
+            <button type="button"
+              class="btn btn-outline"
+              onclick="prevQuestion()">
+              ← Atrás
+            </button>
+
+            <button type="submit"
+              class="btn btn-cafe">
+              ✅ Enviar encuesta
+            </button>
+
+          </div>
+
+        </div>
+
+      </form>
+
+
+      <div class="success" id="success">
+
+        <div class="success-icon">
+          🎉
+        </div>
+
+        <h2>
+          ¡Gracias por participar!
+        </h2>
+
+        <p>
+          Tu opinión nos ayuda a saber si ChallaGPS realmente sería útil
+          para la comunidad de Challapata.
+        </p>
+
+        <button class="btn btn-cafe"
+          onclick="document.getElementById('resultados').scrollIntoView({behavior:'smooth'})">
+          Ver resultados
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<section id="resultados" class="public-results">
+
+<div class="container">
+
+  <h2 class="section-title">
+    Opinión de la comunidad
+  </h2>
+
+  <p class="section-text">
+    Aquí puedes consultar algunos resultados acumulados de la encuesta.
+  </p>
+
+  <div class="result-grid">
+
+    <div class="result-card">
+      <strong id="totalPublic">0</strong>
+      <span>Personas que respondieron</span>
+    </div>
+
+    <div class="result-card">
+      <strong id="yesPlatform">0%</strong>
+      <span>Quieren una plataforma</span>
+    </div>
+
+    <div class="result-card">
+      <strong id="usefulPlatform">0%</strong>
+      <span>La consideran útil</span>
+    </div>
+
+    <div class="result-card">
+      <strong id="recommendPlatform">0%</strong>
+      <span>La recomendarían</span>
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<section id="idea">
+
+<div class="container">
+
+  <h2 class="section-title">
+    💬 También queremos escucharte
+  </h2>
+
+  <p class="section-text">
+    Puedes dejar una opinión, idea o sugerencia sobre ChallaGPS.
+  </p>
+
+  <div class="comments">
+
+    <div class="comment-box">
+
+      <h3>Comparte tu opinión</h3>
+
+      <input
+        class="text-input"
+        id="commentName"
+        placeholder="Tu nombre (opcional)"
+      >
+
+      <br><br>
+
+      <textarea
+        id="commentText"
+        placeholder="¿Qué te gustaría que tenga ChallaGPS?"
+      ></textarea>
+
+      <button
+        class="btn btn-cafe"
+        onclick="addComment()">
+        Publicar opinión
+      </button>
+
+    </div>
+
+
+    <div class="comment-list">
+
+      <h3>Opiniones de la comunidad</h3>
+
+      <div id="commentsList">
+        <p style="color:#786d64">
+          Todavía no hay opiniones. ¡Sé la primera persona en comentar!
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<section id="administracion" class="admin-section">
+
+<div class="container">
+
+  <h2 class="section-title">
+    🔐 Administración de la encuesta
+  </h2>
+
+  <p class="section-text">
+    Área privada para las responsables del proyecto.
+  </p>
+
+
+  <div class="login-box" id="adminLogin">
+
+    <h3>
+      Acceso de administración
+    </h3>
+
+    <p style="color:#786d64;font-size:14px;margin-bottom:15px">
+      Introduce la contraseña para consultar los resultados.
+    </p>
+
+    <input
+      type="password"
+      id="adminPassword"
+      placeholder="Contraseña de administrador"
+    >
+
+    <button
+      class="btn btn-cafe"
+      style="width:100%"
+      onclick="loginAdmin()">
+      🔐 Ingresar
+    </button>
+
+  </div>
+
+
+  <div class="admin-panel" id="adminPanel">
+
+    <div class="admin-top">
+
+      <div>
+        <h2>Panel de resultados</h2>
+        <p style="color:#786d64">
+          Estadísticas de todas las respuestas guardadas en este navegador.
+        </p>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+
+        <button class="btn btn-outline"
+          onclick="exportCSV()">
+          📥 Exportar CSV
+        </button>
+
+        <button class="btn btn-outline"
+          onclick="clearResponses()">
+          🗑️ Borrar datos
+        </button>
+
+        <button class="btn btn-cafe"
+          onclick="logoutAdmin()">
+          Salir
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="admin-stats">
+
+      <div class="admin-stat">
+        <strong id="adminTotal">0</strong>
+        <span>Total respuestas</span>
+      </div>
+
+      <div class="admin-stat">
+        <strong id="adminYes">0%</strong>
+        <span>Apoyan la plataforma</span>
+      </div>
+
+      <div class="admin-stat">
+        <strong id="adminUseful">0%</strong>
+        <span>La consideran útil</span>
+      </div>
+
+      <div class="admin-stat">
+        <strong id="adminRecommend">0%</strong>
+        <span>La recomendarían</span>
+      </div>
+
+    </div>
+
+
+    <div class="charts">
+
+      <div class="chart-box">
+        <h3>
+          ¿Les gustaría ChallaGPS?
+        </h3>
+        <canvas id="chartPlatform"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>
+          ¿Qué tan útil sería?
+        </h3>
+        <canvas id="chartUseful"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>
+          Categoría más buscada
+        </h3>
+        <canvas id="chartCategory"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>
+          ¿Usarían fotografías 360°?
+        </h3>
+        <canvas id="chart360"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>
+          ¿Usarían delivery?
+        </h3>
+        <canvas id="chartDelivery"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>
+          ¿Recomendarían ChallaGPS?
+        </h3>
+        <canvas id="chartRecommend"></canvas>
+      </div>
+
+    </div>
+
+
+    <div class="answers-table">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Vive en Challapata</th>
+            <th>Plataforma</th>
+            <th>Utilidad</th>
+            <th>Categoría</th>
+            <th>Fotos 360°</th>
+            <th>Delivery</th>
+            <th>Recomendaría</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="answersBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+<div class="footer-grid">
+
+  <div>
+    <div class="footer-title">
+      Challa<span style="color:#e8c39e">GPS</span>
+    </div>
+
+    <p>
+      Proyecto digital pensado para conectar a la población
+      con los negocios y servicios de Challapata.
+    </p>
+  </div>
+
+  <div>
+    <div class="footer-title">
+      Encuesta
+    </div>
+
+    <div class="footer-links">
+      <a href="#encuesta">Responder</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#idea">Opiniones</a>
+    </div>
+  </div>
+
+  <div>
+    <div class="footer-title">
+      Proyecto
+    </div>
+
+    <div class="footer-links">
+      <a href="#administracion">Administración</a>
+      <a href="#">Challapata 🇧🇴</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="copyright">
+  © 2026 ChallaGPS · Encuesta de validación del proyecto
+</div>
+
+</footer>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
+
+const ADMIN_PASSWORD = "CHALLAGPSLYC20260";
+
+let currentQuestion = 1;
+
+let platformChart = null;
+let usefulChart = null;
+let categoryChart = null;
+let chart360 = null;
+let deliveryChart = null;
+let recommendChart = null;
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function getResponses(){
+
+  return JSON.parse(
+    localStorage.getItem("challaGPS_responses") || "[]"
+  );
+
+}
+
+function saveResponses(data){
+
+  localStorage.setItem(
+    "challaGPS_responses",
+    JSON.stringify(data)
+  );
+
+}
+
+
+/* =========================================================
+   ENCUESTA
+========================================================= */
+
+function showQuestion(number){
+
+  document
+    .querySelectorAll(".question")
+    .forEach(q => q.classList.remove("active"));
+
+  const question =
+    document.querySelector(
+      `.question[data-question="${number}"]`
+    );
+
+  if(question){
+    question.classList.add("active");
+  }
+
+  currentQuestion = number;
+
+  document.getElementById(
+    "currentQuestion"
+  ).textContent = number;
+
+  document.getElementById(
+    "progressFill"
+  ).style.width = ((number / 20) * 100) + "%";
+
+  window.scrollTo({
+    top:
+      document.getElementById("encuesta").offsetTop - 80,
+    behavior:"smooth"
+  });
+
+}
+
+
+function validateQuestion(){
+
+  const question =
+    document.querySelector(
+      `.question[data-question="${currentQuestion}"]`
+    );
+
+  if(!question) return true;
+
+  const requiredInputs =
+    question.querySelectorAll(
+      "input[required]"
+    );
+
+  if(requiredInputs.length){
+
+    const names = new Set();
+
+    requiredInputs.forEach(input => {
+      names.add(input.name);
+    });
+
+    for(const name of names){
+
+      const checked =
+        question.querySelector(
+          `input[name="${name}"]:checked`
+        );
+
+      if(!checked){
+
+        showToast(
+          "⚠️ Selecciona una respuesta para continuar."
+        );
+
+        return false;
+      }
+
+    }
+
+  }
+
+  return true;
+
+}
+
+
+function nextQuestion(){
+
+  if(!validateQuestion()) return;
+
+  if(currentQuestion < 20){
+
+    showQuestion(currentQuestion + 1);
+
+  }
+
+}
+
+
+function prevQuestion(){
+
+  if(currentQuestion > 1){
+
+    showQuestion(currentQuestion - 1);
+
+  }
+
+}
+
+
+/* =========================================================
+   ENVÍO DE ENCUESTA
+========================================================= */
+
+document
+  .getElementById("surveyForm")
+  .addEventListener("submit", function(event){
+
+    event.preventDefault();
+
+    if(!validateQuestion()) return;
+
+    const formData =
+      new FormData(this);
+
+    const response = {
+
+      id:Date.now(),
+
+      date:new Date().toLocaleString("es-BO"),
+
+      q1:formData.get("q1") || "",
+
+      q2:formData.get("q2") || "",
+
+      q3:formData.get("q3") || "",
+
+      q4:formData.get("q4") || "",
+
+      q5:formData.get("q5") || "",
+
+      q6:formData.get("q6") || "",
+
+      q7:formData.get("q7") || "",
+
+      q8:formData.get("q8") || "",
+
+      q9:formData.get("q9") || "",
+
+      q10:formData.get("q10") || "",
+
+      q11:formData.get("q11") || "",
+
+      q12:formData.get("q12") || "",
+
+      q13:formData.get("q13") || "",
+
+      q14:formData.get("q14") || "",
+
+      q15:formData.get("q15") || "",
+
+      q16:formData.get("q16") || "",
+
+      q17:formData.get("q17") || "",
+
+      q18:formData.get("q18") || "",
+
+      q19:formData.get("q19") || "",
+
+      q20:formData.get("q20") || ""
+
+    };
+
+
+    const responses =
+      getResponses();
+
+    responses.push(response);
+
+    saveResponses(responses);
+
+
+    document
+      .getElementById("surveyForm")
+      .style.display = "none";
+
+    document
+      .getElementById("success")
+      .classList.add("active");
+
+
+    updatePublicResults();
+
+    showToast(
+      "✅ Tu respuesta fue registrada."
+    );
+
+  });
+
+
+/* =========================================================
+   RESULTADOS PÚBLICOS
+========================================================= */
+
+function percentage(condition,total){
+
+  if(!total) return 0;
+
+  return Math.round(
+    (condition / total) * 100
+  );
+
+}
+
+
+function updatePublicResults(){
+
+  const data =
+    getResponses();
+
+  const total =
+    data.length;
+
+  const yes =
+    data.filter(
+      r => r.q4 === "Sí"
+    ).length;
+
+  const useful =
+    data.filter(
+      r =>
+        r.q5 === "Muy útil" ||
+        r.q5 === "Útil"
+    ).length;
+
+  const recommend =
+    data.filter(
+      r =>
+        r.q19 === "Definitivamente sí" ||
+        r.q19 === "Probablemente sí"
+    ).length;
+
+
+  document.getElementById(
+    "totalPublic"
+  ).textContent = total;
+
+  document.getElementById(
+    "yesPlatform"
+  ).textContent =
+    percentage(yes,total) + "%";
+
+  document.getElementById(
+    "usefulPlatform"
+  ).textContent =
+    percentage(useful,total) + "%";
+
+  document.getElementById(
+    "recommendPlatform"
+  ).textContent =
+    percentage(recommend,total) + "%";
+
+}
+
+
+/* =========================================================
+   COMENTARIOS
+========================================================= */
+
+function getComments(){
+
+  return JSON.parse(
+    localStorage.getItem("challaGPS_comments") || "[]"
+  );
+
+}
+
+
+function saveComments(data){
+
+  localStorage.setItem(
+    "challaGPS_comments",
+    JSON.stringify(data)
+  );
+
+}
+
+
+function addComment(){
+
+  const name =
+    document
+      .getElementById("commentName")
+      .value
+      .trim();
+
+  const text =
+    document
+      .getElementById("commentText")
+      .value
+      .trim();
+
+
+  if(!text){
+
+    showToast(
+      "⚠️ Escribe una opinión antes de publicar."
+    );
+
+    return;
+
+  }
+
+
+  const comments =
+    getComments();
+
+
+  comments.unshift({
+
+    name:name || "Persona de Challapata",
+
+    text:text,
+
+    date:new Date().toLocaleDateString("es-BO")
+
+  });
+
+
+  saveComments(comments);
+
+
+  document.getElementById(
+    "commentName"
+  ).value = "";
+
+  document.getElementById(
+    "commentText"
+  ).value = "";
+
+
+  renderComments();
+
+  showToast(
+    "💬 Opinión publicada."
+  );
+
+}
+
+
+function renderComments(){
+
+  const list =
+    document.getElementById(
+      "commentsList"
+    );
+
+  const comments =
+    getComments();
+
+
+  if(!comments.length){
+
+    list.innerHTML = `
+      <p style="color:#786d64">
+        Todavía no hay opiniones.
+        ¡Sé la primera persona en comentar!
+      </p>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    comments
+      .map(comment => `
+
+        <div class="comment-item">
+
+          <strong>
+            ${escapeHTML(comment.name)}
+          </strong>
+
+          <small style="
+            color:#a08d7e;
+            margin-left:6px;
+          ">
+            ${comment.date}
+          </small>
+
+          <p>
+            ${escapeHTML(comment.text)}
+          </p>
+
+        </div>
+
+      `)
+      .join("");
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   ADMINISTRACIÓN
+========================================================= */
+
+function loginAdmin(){
+
+  const password =
+    document
+      .getElementById("adminPassword")
+      .value;
+
+
+  if(password === ADMIN_PASSWORD){
+
+    document
+      .getElementById("adminLogin")
+      .style.display = "none";
+
+    document
+      .getElementById("adminPanel")
+      .classList.add("active");
+
+    updateDashboard();
+
+    showToast(
+      "🔓 Acceso concedido."
+    );
+
+  }else{
+
+    showToast(
+      "❌ Contraseña incorrecta."
+    );
+
+  }
+
+}
+
+
+function logoutAdmin(){
+
+  document
+    .getElementById("adminLogin")
+    .style.display = "block";
+
+  document
+    .getElementById("adminPanel")
+    .classList.remove("active");
+
+  document
+    .getElementById("adminPassword")
+    .value = "";
+
+}
+
+
+function updateDashboard(){
+
+  const data =
+    getResponses();
+
+  const total =
+    data.length;
+
+
+  const yes =
+    data.filter(
+      r => r.q4 === "Sí"
+    ).length;
+
+  const useful =
+    data.filter(
+      r =>
+        r.q5 === "Muy útil" ||
+        r.q5 === "Útil"
+    ).length;
+
+  const recommend =
+    data.filter(
+      r =>
+        r.q19 === "Definitivamente sí" ||
+        r.q19 === "Probablemente sí"
+    ).length;
+
+
+  document.getElementById(
+    "adminTotal"
+  ).textContent = total;
+
+  document.getElementById(
+    "adminYes"
+  ).textContent =
+    percentage(yes,total) + "%";
+
+  document.getElementById(
+    "adminUseful"
+  ).textContent =
+    percentage(useful,total) + "%";
+
+  document.getElementById(
+    "adminRecommend"
+  ).textContent =
+    percentage(recommend,total) + "%";
+
+
+  createCharts(data);
+
+  renderAnswers(data);
+
+}
+
+
+/* =========================================================
+   FUNCIONES DE CONTEO
+========================================================= */
+
+function countValues(data,key,values){
+
+  const result = {};
+
+  values.forEach(
+    value => result[value] = 0
+  );
+
+
+  data.forEach(row => {
+
+    if(result[row[key]] !== undefined){
+
+      result[row[key]]++;
+
+    }
+
+  });
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   GRÁFICOS
+========================================================= */
+
+function destroyChart(chart){
+
+  if(chart){
+    chart.destroy();
+  }
+
+}
+
+
+function createCharts(data){
+
+  destroyChart(platformChart);
+  destroyChart(usefulChart);
+  destroyChart(categoryChart);
+  destroyChart(chart360);
+  destroyChart(deliveryChart);
+  destroyChart(recommendChart);
+
+
+  const platform =
+    countValues(
+      data,
+      "q4",
+      ["Sí","Tal vez","No"]
+    );
+
+
+  platformChart =
+    new Chart(
+      document
+        .getElementById("chartPlatform"),
+      {
+        type:"doughnut",
+
+        data:{
+          labels:Object.keys(platform),
+
+          datasets:[{
+            data:Object.values(platform),
+
+            backgroundColor:[
+              "#38761d",
+              "#d69e2e",
+              "#b42318"
+            ]
+          }]
+        },
+
+        options:{
+          responsive:true,
+          plugins:{
+            legend:{
+              position:"bottom"
+            }
+          }
+        }
+
+      }
+    );
+
+
+  const useful =
+    countValues(
+      data,
+      "q5",
+      [
+        "Muy útil",
+        "Útil",
+        "Poco útil",
+        "Nada útil"
+      ]
+    );
+
+
+  usefulChart =
+    new Chart(
+      document
+        .getElementById("chartUseful"),
+      {
+        type:"bar",
+
+        data:{
+          labels:Object.keys(useful),
+
+          datasets:[{
+            label:"Respuestas",
+
+            data:Object.values(useful),
+
+            backgroundColor:[
+              "#6b4226",
+              "#8b5e3c",
+              "#c89b6d",
+              "#d8c7b7"
+            ],
+
+            borderRadius:8
+          }]
+        },
+
+        options:{
+          responsive:true,
+          scales:{
+            y:{
+              beginAtZero:true,
+              ticks:{
+                precision:0
+              }
+            }
+          }
+        }
+
+      }
+    );
+
+
+  const category =
+    countValues(
+      data,
+      "q6",
+      [
+        "Restaurantes",
+        "Hoteles",
+        "Tiendas",
+        "Salud",
+        "Servicios"
+      ]
+    );
+
+
+  categoryChart =
+    new Chart(
+      document
+        .getElementById("chartCategory"),
+      {
+        type:"pie",
+
+        data:{
+          labels:Object.keys(category),
+
+          datasets:[{
+            data:Object.values(category),
+
+            backgroundColor:[
+              "#6b4226",
+              "#38761d",
+              "#c89b6d",
+              "#d69e2e",
+              "#8b5e3c"
+            ]
+          }]
+        },
+
+        options:{
+          responsive:true,
+          plugins:{
+            legend:{
+              position:"bottom"
+            }
+          }
+        }
+
+      }
+    );
+
+
+  const photos360 =
+    countValues(
+      data,
+      "q9",
+      [
+        "Sí",
+        "Tal vez",
+        "No"
+      ]
+    );
+
+
+  chart360 =
+    new Chart(
+      document
+        .getElementById("chart360"),
+      {
+        type:"doughnut",
+
+        data:{
+          labels:Object.keys(photos360),
+
+          datasets:[{
+            data:Object.values(photos360),
+
+            backgroundColor:[
+              "#38761d",
+              "#d69e2e",
+              "#b42318"
+            ]
+          }]
+        },
+
+        options:{
+          responsive:true,
+          plugins:{
+            legend:{
+              position:"bottom"
+            }
+          }
+        }
+
+      }
+    );
+
+
+  const delivery =
+    countValues(
+      data,
+      "q14",
+      [
+        "Sí",
+        "Tal vez",
+        "No"
+      ]
+    );
+
+
+  deliveryChart =
+    new Chart(
+      document
+        .getElementById("chartDelivery"),
+      {
+        type:"bar",
+
+        data:{
+          labels:Object.keys(delivery),
+
+          datasets:[{
+            label:"Personas",
+
+            data:Object.values(delivery),
+
+            backgroundColor:[
+              "#38761d",
+              "#d69e2e",
+              "#b42318"
+            ],
+
+            borderRadius:8
+          }]
+        },
+
+        options:{
+          responsive:true,
+          scales:{
+            y:{
+              beginAtZero:true,
+              ticks:{
+                precision:0
+              }
+            }
+          }
+        }
+
+      }
+    );
+
+
+  const recommend =
+    countValues(
+      data,
+      "q19",
+      [
+        "Definitivamente sí",
+        "Probablemente sí",
+        "No estoy seguro",
+        "No"
+      ]
+    );
+
+
+  recommendChart =
+    new Chart(
+      document
+        .getElementById("chartRecommend"),
+      {
+        type:"doughnut",
+
+        data:{
+          labels:Object.keys(recommend),
+
+          datasets:[{
+            data:Object.values(recommend),
+
+            backgroundColor:[
+              "#38761d",
+              "#6fa84f",
+              "#d69e2e",
+              "#b42318"
+            ]
+          }]
+        },
+
+        options:{
+          responsive:true,
+          plugins:{
+            legend:{
+              position:"bottom"
+            }
+          }
+        }
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   TABLA DE RESPUESTAS
+========================================================= */
+
+function renderAnswers(data){
+
+  const body =
+    document.getElementById(
+      "answersBody"
+    );
+
+
+  if(!data.length){
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="9"
+          style="text-align:center;color:#786d64">
+          Todavía no existen respuestas.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  body.innerHTML =
+    data
+      .slice()
+      .reverse()
+      .map(
+        (r,index) => `
+
+          <tr>
+
+            <td>${index + 1}</td>
+
+            <td>${escapeHTML(r.date)}</td>
+
+            <td>${escapeHTML(r.q1)}</td>
+
+            <td>${escapeHTML(r.q4)}</td>
+
+            <td>${escapeHTML(r.q5)}</td>
+
+            <td>${escapeHTML(r.q6)}</td>
+
+            <td>${escapeHTML(r.q9)}</td>
+
+            <td>${escapeHTML(r.q14)}</td>
+
+            <td>${escapeHTML(r.q19)}</td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   EXPORTAR CSV
+========================================================= */
+
+function exportCSV(){
+
+  const data =
+    getResponses();
+
+
+  if(!data.length){
+
+    showToast(
+      "No existen respuestas para exportar."
+    );
+
+    return;
+
+  }
+
+
+  const headers = [
+
+    "Fecha",
+    "Vive en Challapata",
+    "Frecuencia búsqueda",
+    "Cómo encuentra negocios",
+    "Quiere ChallaGPS",
+    "Utilidad",
+    "Categoría",
+    "Información negocio",
+    "Importancia fotos",
+    "Fotos 360",
+    "Leer reseñas",
+    "Dejar reseña",
+    "Importancia calificación",
+    "Opción restaurante",
+    "Delivery",
+    "Contacto negocio",
+    "Dispositivo",
+    "Frecuencia uso",
+    "Ayuda a negocios",
+    "Recomendaría",
+    "Sugerencia"
+
+  ];
+
+
+  const rows =
+    data.map(r => [
+
+      r.date,
+      r.q1,
+      r.q2,
+      r.q3,
+      r.q4,
+      r.q5,
+      r.q6,
+      r.q7,
+      r.q8,
+      r.q9,
+      r.q10,
+      r.q11,
+      r.q12,
+      r.q13,
+      r.q14,
+      r.q15,
+      r.q16,
+      r.q17,
+      r.q18,
+      r.q19,
+      r.q20
+
+    ]);
+
+
+  const csv = [
+
+    headers,
+
+    ...rows
+
+  ]
+  .map(row =>
+    row
+      .map(value =>
+        `"${String(value ?? "")
+          .replace(/"/g,'""')}"`
+      )
+      .join(",")
+  )
+  .join("\n");
+
+
+  const blob =
+    new Blob(
+      ["\ufeff" + csv],
+      {
+        type:"text/csv;charset=utf-8;"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+
+  link.download =
+    "resultados_ChallaGPS.csv";
+
+  link.click();
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================================================
+   BORRAR RESPUESTAS
+========================================================= */
+
+function clearResponses(){
+
+  const confirmation =
+    confirm(
+      "¿Seguro que deseas borrar TODAS las respuestas de la encuesta?"
+    );
+
+
+  if(!confirmation) return;
+
+
+  localStorage.removeItem(
+    "challaGPS_responses"
+  );
+
+
+  updatePublicResults();
+
+  updateDashboard();
+
+  showToast(
+    "🗑️ Todas las respuestas fueron eliminadas."
+  );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+
+  setTimeout(() => {
+
+    toast.classList.remove("show");
+
+  },3000);
+
+}
+
+
+/* =========================================================
+   INICIALIZACIÓN
+========================================================= */
+
+renderComments();
+
+updatePublicResults();
+
+showQuestion(1);
+
+
+/* ENTER EN CONTRASEÑA */
+
+document
+  .getElementById("adminPassword")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(event.key === "Enter"){
+
+        loginAdmin();
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>

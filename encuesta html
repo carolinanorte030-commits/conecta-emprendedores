@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encuesta ChallaGPS</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+  --cafe:#6f4e37;
+  --cafe2:#8b5e3c;
+  --cafe3:#a47148;
+  --crema:#f7efe3;
+  --beige:#ead8c0;
+  --blanco:#fffdf9;
+  --texto:#3e3028;
+  --gris:#806f63;
+  --verde:#6b8e23;
+  --sombra:0 12px 35px rgba(78,52,32,.12);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,#f8f0e5,#ead8c0);
+  color:var(--texto);
+  min-height:100vh;
+}
+
+header{
+  background:linear-gradient(135deg,var(--cafe),var(--cafe2));
+  color:white;
+  padding:45px 20px 70px;
+  text-align:center;
+}
+
+.logo{
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.logo span{
+  color:#f1d3a5;
+}
+
+header p{
+  max-width:720px;
+  margin:auto;
+  line-height:1.6;
+  color:#f8ead8;
+}
+
+.container{
+  width:min(900px,92%);
+  margin:-35px auto 60px;
+}
+
+.card{
+  background:var(--blanco);
+  border-radius:24px;
+  padding:30px;
+  box-shadow:var(--sombra);
+  margin-bottom:25px;
+}
+
+.intro{
+  text-align:center;
+}
+
+.intro h1{
+  color:var(--cafe);
+  margin-bottom:12px;
+}
+
+.intro p{
+  color:var(--gris);
+  line-height:1.6;
+}
+
+.progress-box{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(255,253,249,.96);
+  backdrop-filter:blur(10px);
+  padding:15px;
+  border-bottom:1px solid var(--beige);
+}
+
+.progress-info{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+  font-size:13px;
+  font-weight:bold;
+  color:var(--cafe);
+}
+
+.progress{
+  height:10px;
+  background:#eadfd2;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--cafe),var(--cafe3));
+  transition:.3s;
+}
+
+.question{
+  margin-bottom:32px;
+  padding-bottom:28px;
+  border-bottom:1px solid #eee2d5;
+}
+
+.question:last-child{
+  border-bottom:0;
+}
+
+.question-number{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;
+  height:32px;
+  background:var(--cafe);
+  color:white;
+  border-radius:50%;
+  font-weight:bold;
+  margin-right:8px;
+}
+
+.question h3{
+  display:inline;
+  color:#392b23;
+  font-size:18px;
+  line-height:1.5;
+}
+
+.question-description{
+  color:var(--gris);
+  font-size:13px;
+  margin:8px 0 15px 42px;
+}
+
+.options{
+  display:grid;
+  gap:10px;
+  margin-left:42px;
+}
+
+.option{
+  position:relative;
+}
+
+.option input{
+  position:absolute;
+  opacity:0;
+}
+
+.option label{
+  display:block;
+  padding:14px 16px;
+  border:2px solid #eadfd2;
+  border-radius:12px;
+  cursor:pointer;
+  background:#fff;
+  transition:.2s;
+}
+
+.option label:hover{
+  border-color:var(--cafe3);
+  background:#fff8ef;
+}
+
+.option input:checked + label{
+  border-color:var(--cafe);
+  background:#f2e5d6;
+  color:var(--cafe);
+  font-weight:bold;
+}
+
+textarea,
+input[type="text"],
+input[type="email"]{
+  width:100%;
+  border:2px solid #eadfd2;
+  border-radius:12px;
+  padding:14px;
+  outline:none;
+  background:white;
+  color:var(--texto);
+  margin-top:10px;
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+textarea:focus,
+input:focus{
+  border-color:var(--cafe);
+}
+
+.required{
+  color:#b42318;
+}
+
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:30px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:14px 25px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+.btn-primary{
+  background:var(--cafe);
+  color:white;
+}
+
+.btn-secondary{
+  background:#ead8c0;
+  color:var(--cafe);
+}
+
+.message{
+  display:none;
+  text-align:center;
+  padding:25px;
+  background:#edf7e5;
+  color:#49651b;
+  border-radius:15px;
+  margin-top:25px;
+  line-height:1.6;
+}
+
+.admin{
+  margin-top:50px;
+}
+
+.admin h2{
+  color:var(--cafe);
+  margin-bottom:8px;
+}
+
+.admin-description{
+  color:var(--gris);
+  margin-bottom:20px;
+}
+
+.admin-login{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+}
+
+.results{
+  display:none;
+}
+
+.chart-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.chart-card{
+  background:#fffaf4;
+  border:1px solid #eadfd2;
+  border-radius:18px;
+  padding:20px;
+}
+
+.chart-card h3{
+  color:var(--cafe);
+  margin-bottom:15px;
+  text-align:center;
+}
+
+.chart-container{
+  position:relative;
+  height:280px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.stat{
+  background:#f6eadc;
+  padding:18px;
+  border-radius:15px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:28px;
+  color:var(--cafe);
+}
+
+.stat span{
+  font-size:13px;
+  color:var(--gris);
+}
+
+footer{
+  background:#3c2b21;
+  color:#eadfd2;
+  text-align:center;
+  padding:30px 20px;
+  line-height:1.6;
+}
+
+.small{
+  font-size:12px;
+  color:#a9988b;
+}
+
+@media(max-width:650px){
+
+  header{
+    padding:35px 15px 60px;
+  }
+
+  .logo{
+    font-size:28px;
+  }
+
+  .card{
+    padding:20px;
+    border-radius:18px;
+  }
+
+  .question h3{
+    font-size:16px;
+  }
+
+  .options{
+    margin-left:0;
+  }
+
+  .question-description{
+    margin-left:0;
+  }
+
+  .chart-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .admin-login{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">📍 Challa<span>GPS</span></div>
+
+  <p>
+    Encuesta de opinión ciudadana sobre una nueva plataforma web
+    para descubrir negocios, servicios y emprendimientos de Challapata.
+  </p>
+</header>
+
+<div class="progress-box">
+  <div class="progress-info">
+    <span>Progreso de la encuesta</span>
+    <span id="progressText">0%</span>
+  </div>
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</div>
+
+<main class="container">
+
+  <div class="card intro">
+
+    <h1>Queremos conocer tu opinión 💬</h1>
+
+    <p>
+      Esta encuesta busca conocer si las personas de Challapata estarían
+      interesadas en utilizar una plataforma web como <strong>ChallaGPS</strong>,
+      donde puedan encontrar negocios, hoteles, restaurantes, tiendas,
+      servicios y otros emprendimientos de la ciudad.
+    </p>
+
+    <br>
+
+    <p>
+      ⏱️ Tiempo aproximado: <strong>3 minutos</strong>
+    </p>
+
+    <p class="small">
+      Tus respuestas serán utilizadas únicamente con fines académicos
+      y para evaluar la viabilidad del proyecto.
+    </p>
+
+  </div>
+
+
+  <form id="surveyForm">
+
+    <div class="card">
+
+      <!-- 1 -->
+      <div class="question">
+        <span class="question-number">1</span>
+        <h3>¿Vives actualmente en Challapata? <span class="required">*</span></h3>
+
+        <div class="options">
+          <div class="option">
+            <input type="radio" name="q1" value="Sí" required id="q1a">
+            <label for="q1a">Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q1" value="No" id="q1b">
+            <label for="q1b">No</label>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 2 -->
+      <div class="question">
+        <span class="question-number">2</span>
+        <h3>¿Con qué frecuencia buscas información sobre negocios o servicios? <span class="required">*</span></h3>
+
+        <div class="options">
+          <div class="option">
+            <input type="radio" name="q2" value="Todos los días" required id="q2a">
+            <label for="q2a">Todos los días</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q2" value="Varias veces por semana" id="q2b">
+            <label for="q2b">Varias veces por semana</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q2" value="Algunas veces al mes" id="q2c">
+            <label for="q2c">Algunas veces al mes</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q2" value="Casi nunca" id="q2d">
+            <label for="q2d">Casi nunca</label>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 3 -->
+      <div class="question">
+        <span class="question-number">3</span>
+        <h3>¿Cómo buscas actualmente un negocio o servicio en Challapata? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q3" value="Facebook" required id="q3a">
+            <label for="q3a">📘 Facebook</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q3" value="WhatsApp" id="q3b">
+            <label for="q3b">💬 WhatsApp</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q3" value="Google" id="q3c">
+            <label for="q3c">🔎 Google</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q3" value="Pregunto a otras personas" id="q3d">
+            <label for="q3d">👥 Pregunto a otras personas</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q3" value="Otro" id="q3e">
+            <label for="q3e">Otro</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 4 -->
+      <div class="question">
+        <span class="question-number">4</span>
+        <h3>¿Te resulta fácil encontrar información confiable de los negocios locales? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q4" value="Sí" required id="q4a">
+            <label for="q4a">Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q4" value="A veces" id="q4b">
+            <label for="q4b">A veces</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q4" value="No" id="q4c">
+            <label for="q4c">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 5 -->
+      <div class="question">
+        <span class="question-number">5</span>
+        <h3>Si existiera ChallaGPS, ¿la utilizarías para buscar negocios? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q5" value="Sí, definitivamente" required id="q5a">
+            <label for="q5a">😍 Sí, definitivamente</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q5" value="Probablemente sí" id="q5b">
+            <label for="q5b">👍 Probablemente sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q5" value="No estoy seguro/a" id="q5c">
+            <label for="q5c">🤔 No estoy seguro/a</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q5" value="No" id="q5d">
+            <label for="q5d">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 6 -->
+      <div class="question">
+        <span class="question-number">6</span>
+        <h3>¿Qué tipo de negocios te gustaría encontrar en ChallaGPS? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="checkbox" name="q6" value="Restaurantes" id="q6a">
+            <label for="q6a">🍽️ Restaurantes</label>
+          </div>
+
+          <div class="option">
+            <input type="checkbox" name="q6" value="Hoteles" id="q6b">
+            <label for="q6b">🏨 Hoteles</label>
+          </div>
+
+          <div class="option">
+            <input type="checkbox" name="q6" value="Tiendas" id="q6c">
+            <label for="q6c">🛒 Tiendas</label>
+          </div>
+
+          <div class="option">
+            <input type="checkbox" name="q6" value="Salud" id="q6d">
+            <label for="q6d">🏥 Salud</label>
+          </div>
+
+          <div class="option">
+            <input type="checkbox" name="q6" value="Servicios" id="q6e">
+            <label for="q6e">🔧 Servicios</label>
+          </div>
+
+          <div class="option">
+            <input type="checkbox" name="q6" value="Belleza" id="q6f">
+            <label for="q6f">💇 Belleza</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 7 -->
+      <div class="question">
+        <span class="question-number">7</span>
+        <h3>¿Qué tan importante sería para ti ver la ubicación exacta del negocio en un mapa? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q7" value="Muy importante" required id="q7a">
+            <label for="q7a">⭐ Muy importante</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q7" value="Importante" id="q7b">
+            <label for="q7b">Importante</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q7" value="Poco importante" id="q7c">
+            <label for="q7c">Poco importante</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q7" value="Nada importante" id="q7d">
+            <label for="q7d">Nada importante</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 8 -->
+      <div class="question">
+        <span class="question-number">8</span>
+        <h3>¿Te gustaría poder ver fotografías reales de los negocios antes de visitarlos? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q8" value="Sí" required id="q8a">
+            <label for="q8a">📷 Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q8" value="Tal vez" id="q8b">
+            <label for="q8b">Tal vez</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q8" value="No" id="q8c">
+            <label for="q8c">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 9 -->
+      <div class="question">
+        <span class="question-number">9</span>
+        <h3>¿Qué opinas de incorporar fotografías o recorridos en 360° de los negocios? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q9" value="Excelente idea" required id="q9a">
+            <label for="q9a">😍 Excelente idea</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q9" value="Buena idea" id="q9b">
+            <label for="q9b">👍 Buena idea</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q9" value="Me da igual" id="q9c">
+            <label for="q9c">Me da igual</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q9" value="No me interesa" id="q9d">
+            <label for="q9d">No me interesa</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 10 -->
+      <div class="question">
+        <span class="question-number">10</span>
+        <h3>¿Te gustaría poder consultar varias fotos de un negocio? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q10" value="Sí" required id="q10a">
+            <label for="q10a">📸 Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q10" value="Tal vez" id="q10b">
+            <label for="q10b">Tal vez</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q10" value="No" id="q10c">
+            <label for="q10c">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 11 -->
+      <div class="question">
+        <span class="question-number">11</span>
+        <h3>¿Qué tan importantes serían las reseñas de otros usuarios? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q11" value="Muy importantes" required id="q11a">
+            <label for="q11a">⭐⭐⭐⭐⭐ Muy importantes</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q11" value="Importantes" id="q11b">
+            <label for="q11b">Importantes</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q11" value="Poco importantes" id="q11c">
+            <label for="q11c">Poco importantes</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q11" value="No las utilizaría" id="q11d">
+            <label for="q11d">No las utilizaría</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 12 -->
+      <div class="question">
+        <span class="question-number">12</span>
+        <h3>¿Te gustaría poder calificar un negocio con estrellas? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q12" value="Sí" required id="q12a">
+            <label for="q12a">⭐ Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q12" value="Tal vez" id="q12b">
+            <label for="q12b">Tal vez</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q12" value="No" id="q12c">
+            <label for="q12c">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 13 -->
+      <div class="question">
+        <span class="question-number">13</span>
+        <h3>¿Te gustaría poder escribir comentarios sobre tu experiencia en un negocio? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q13" value="Sí" required id="q13a">
+            <label for="q13a">💬 Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q13" value="Tal vez" id="q13b">
+            <label for="q13b">Tal vez</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q13" value="No" id="q13c">
+            <label for="q13c">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 14 -->
+      <div class="question">
+        <span class="question-number">14</span>
+        <h3>En los restaurantes, ¿te sería útil saber si tienen servicio de delivery? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q14" value="Muy útil" required id="q14a">
+            <label for="q14a">🛵 Muy útil</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q14" value="Útil" id="q14b">
+            <label for="q14b">Útil</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q14" value="Poco útil" id="q14c">
+            <label for="q14c">Poco útil</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q14" value="No me interesa" id="q14d">
+            <label for="q14d">No me interesa</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 15 -->
+      <div class="question">
+        <span class="question-number">15</span>
+        <h3>¿Qué información consideras más importante al consultar un negocio? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q15" value="Ubicación" required id="q15a">
+            <label for="q15a">📍 Ubicación</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q15" value="Precios" id="q15b">
+            <label for="q15b">💰 Precios</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q15" value="Horarios" id="q15c">
+            <label for="q15c">🕐 Horarios</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q15" value="Opiniones" id="q15d">
+            <label for="q15d">⭐ Opiniones</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q15" value="Fotos" id="q15e">
+            <label for="q15e">📷 Fotos</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 16 -->
+      <div class="question">
+        <span class="question-number">16</span>
+        <h3>¿Usarías ChallaGPS para recomendar negocios a familiares o amigos? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q16" value="Sí" required id="q16a">
+            <label for="q16a">❤️ Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q16" value="Probablemente" id="q16b">
+            <label for="q16b">Probablemente</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q16" value="No estoy seguro/a" id="q16c">
+            <label for="q16c">No estoy seguro/a</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q16" value="No" id="q16d">
+            <label for="q16d">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 17 -->
+      <div class="question">
+        <span class="question-number">17</span>
+        <h3>¿Crees que una plataforma así ayudaría a los pequeños negocios de Challapata? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q17" value="Sí, mucho" required id="q17a">
+            <label for="q17a">🚀 Sí, mucho</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q17" value="Sí, un poco" id="q17b">
+            <label for="q17b">Sí, un poco</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q17" value="No estoy seguro/a" id="q17c">
+            <label for="q17c">No estoy seguro/a</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q17" value="No" id="q17d">
+            <label for="q17d">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 18 -->
+      <div class="question">
+        <span class="question-number">18</span>
+        <h3>¿Qué tan interesado/a estarías en utilizar una plataforma como ChallaGPS? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q18" value="Muy interesado/a" required id="q18a">
+            <label for="q18a">🔥 Muy interesado/a</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q18" value="Interesado/a" id="q18b">
+            <label for="q18b">Interesado/a</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q18" value="Poco interesado/a" id="q18c">
+            <label for="q18c">Poco interesado/a</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q18" value="Nada interesado/a" id="q18d">
+            <label for="q18d">Nada interesado/a</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 19 -->
+      <div class="question">
+        <span class="question-number">19</span>
+        <h3>¿Recomendarías que se implemente ChallaGPS en Challapata? <span class="required">*</span></h3>
+
+        <div class="options">
+
+          <div class="option">
+            <input type="radio" name="q19" value="Sí" required id="q19a">
+            <label for="q19a">🇧🇴 Sí</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q19" value="Tal vez" id="q19b">
+            <label for="q19b">Tal vez</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" name="q19" value="No" id="q19c">
+            <label for="q19c">No</label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 20 -->
+      <div class="question">
+
+        <span class="question-number">20</span>
+
+        <h3>
+          ¿Qué recomendación o función agregarías a ChallaGPS?
+        </h3>
+
+        <textarea
+          id="q20"
+          name="q20"
+          placeholder="Escribe aquí tu opinión..."
+        ></textarea>
+
+      </div>
+
+
+      <div class="buttons">
+
+        <button
+          type="button"
+          class="btn-secondary"
+          onclick="limpiarEncuesta()">
+          Limpiar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primary">
+          Enviar encuesta 🚀
+        </button>
+
+      </div>
+
+      <div class="message" id="successMessage">
+
+        <h2>🎉 ¡Gracias por participar!</h2>
+
+        <p>
+          Tu opinión nos ayudará a saber si ChallaGPS puede ser
+          una herramienta útil para Challapata.
+        </p>
+
+        <br>
+
+        <strong>
+          ¡Gracias por apoyar los emprendimientos locales! 🇧🇴
+        </strong>
+
+      </div>
+
+    </div>
+
+  </form>
+
+
+  <!-- ==================================
+       PANEL DE RESULTADOS
+  ================================== -->
+
+  <section class="admin">
+
+    <div class="card">
+
+      <h2>📊 Resultados de la encuesta</h2>
+
+      <p class="admin-description">
+        Esta sección está pensada para las creadoras de ChallaGPS.
+        En una versión conectada a Google Sheets, aquí podrían visualizar
+        automáticamente las respuestas y estadísticas.
+      </p>
+
+      <div class="admin-login">
+
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Contraseña de administradoras">
+
+        <button
+          class="btn-primary"
+          onclick="mostrarResultados()">
+          Ver resultados
+        </button>
+
+      </div>
+
+      <p class="small" style="margin-top:10px;">
+        Demo: contraseña <strong>challa2026</strong>
+      </p>
+
+    </div>
+
+
+    <div class="card results" id="results">
+
+      <h2 style="color:#6f4e37;margin-bottom:20px;">
+        📈 Panel de resultados
+      </h2>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong id="totalResponses">0</strong>
+          <span>Respuestas</span>
+        </div>
+
+        <div class="stat">
+          <strong id="interestedPercent">0%</strong>
+          <span>Interesados</span>
+        </div>
+
+        <div class="stat">
+          <strong id="recommendPercent">0%</strong>
+          <span>Recomendarían</span>
+        </div>
+
+      </div>
+
+
+      <div class="chart-grid">
+
+        <div class="chart-card">
+
+          <h3>¿Usarían ChallaGPS?</h3>
+
+          <div class="chart-container">
+            <canvas id="chartInterest"></canvas>
+          </div>
+
+        </div>
+
+
+        <div class="chart-card">
+
+          <h3>¿Recomendarían la plataforma?</h3>
+
+          <div class="chart-container">
+            <canvas id="chartRecommend"></canvas>
+          </div>
+
+        </div>
+
+
+        <div class="chart-card">
+
+          <h3>Importancia del mapa</h3>
+
+          <div class="chart-container">
+            <canvas id="chartMap"></canvas>
+          </div>
+
+        </div>
+
+
+        <div class="chart-card">
+
+          <h3>Interés en fotografías 360°</h3>
+
+          <div class="chart-container">
+            <canvas id="chart360"></canvas>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <strong>ChallaGPS</strong>
+
+  <p>
+    Encuesta para conocer la opinión de la población de Challapata.
+  </p>
+
+  <p class="small">
+    Proyecto académico · 2026
+  </p>
+
+</footer>
+
+
+<script>
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+let responses =
+JSON.parse(localStorage.getItem("challaGPS_responses")) || [];
+
+
+/* ==========================================
+   PROGRESO
+========================================== */
+
+const form = document.getElementById("surveyForm");
+
+function updateProgress(){
+
+  const questions =
+  document.querySelectorAll(".question");
+
+  let answered = 0;
+
+  questions.forEach(question => {
+
+    const inputs =
+    question.querySelectorAll("input, textarea");
+
+    let hasAnswer = false;
+
+    inputs.forEach(input => {
+
+      if(
+        (input.type === "radio" ||
+         input.type === "checkbox") &&
+        input.checked
+      ){
+        hasAnswer = true;
+      }
+
+      if(
+        input.tagName === "TEXTAREA" &&
+        input.value.trim()
+      ){
+        hasAnswer = true;
+      }
+
+    });
+
+    if(hasAnswer) answered++;
+
+  });
+
+  const percentage =
+  Math.round(
+    (answered / questions.length) * 100
+  );
+
+  document.getElementById("progressBar")
+    .style.width = percentage + "%";
+
+  document.getElementById("progressText")
+    .textContent = percentage + "%";
+}
+
+
+document.addEventListener("change",updateProgress);
+
+document.addEventListener("input",updateProgress);
+
+
+/* ==========================================
+   ENVÍO
+========================================== */
+
+form.addEventListener("submit",function(event){
+
+  event.preventDefault();
+
+
+  /*
+    Comprobar preguntas obligatorias
+  */
+
+  if(!form.checkValidity()){
+
+    form.reportValidity();
+
+    return;
+
+  }
+
+
+  const data = {
+
+    fecha:
+    new Date().toLocaleString("es-BO"),
+
+    q1:
+    getRadio("q1"),
+
+    q2:
+    getRadio("q2"),
+
+    q3:
+    getRadio("q3"),
+
+    q4:
+    getRadio("q4"),
+
+    q5:
+    getRadio("q5"),
+
+    q6:
+    getCheckboxes("q6"),
+
+    q7:
+    getRadio("q7"),
+
+    q8:
+    getRadio("q8"),
+
+    q9:
+    getRadio("q9"),
+
+    q10:
+    getRadio("q10"),
+
+    q11:
+    getRadio("q11"),
+
+    q12:
+    getRadio("q12"),
+
+    q13:
+    getRadio("q13"),
+
+    q14:
+    getRadio("q14"),
+
+    q15:
+    getRadio("q15"),
+
+    q16:
+    getRadio("q16"),
+
+    q17:
+    getRadio("q17"),
+
+    q18:
+    getRadio("q18"),
+
+    q19:
+    getRadio("q19"),
+
+    q20:
+    document.getElementById("q20").value
+
+  };
+
+
+  responses.push(data);
+
+
+  localStorage.setItem(
+    "challaGPS_responses",
+    JSON.stringify(responses)
+  );
+
+
+  document.getElementById("successMessage")
+    .style.display = "block";
+
+
+  form.reset();
+
+  updateProgress();
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+});
+
+
+/* ==========================================
+   OBTENER RADIO
+========================================== */
+
+function getRadio(name){
+
+  const element =
+  document.querySelector(
+    `input[name="${name}"]:checked`
+  );
+
+  return element
+    ? element.value
+    : "";
+
+}
+
+
+/* ==========================================
+   OBTENER CHECKBOX
+========================================== */
+
+function getCheckboxes(name){
+
+  return Array.from(
+    document.querySelectorAll(
+      `input[name="${name}"]:checked`
+    )
+  ).map(
+    checkbox => checkbox.value
+  );
+
+}
+
+
+/* ==========================================
+   LIMPIAR
+========================================== */
+
+function limpiarEncuesta(){
+
+  if(
+    confirm(
+      "¿Quieres borrar todas las respuestas de esta encuesta?"
+    )
+  ){
+
+    form.reset();
+
+    updateProgress();
+
+  }
+
+}
+
+
+/* ==========================================
+   RESULTADOS
+========================================== */
+
+let chartInterest;
+let chartRecommend;
+let chartMap;
+let chart360;
+
+
+function mostrarResultados(){
+
+  const password =
+  document.getElementById("adminPassword").value;
+
+
+  if(password !== "challa2026"){
+
+    alert("❌ Contraseña incorrecta.");
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("results")
+    .style.display = "block";
+
+
+  generarResultados();
+
+
+  document
+    .getElementById("results")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+}
+
+
+/* ==========================================
+   GENERAR RESULTADOS
+========================================== */
+
+function generarResultados(){
+
+  const total =
+  responses.length;
+
+
+  document.getElementById("totalResponses")
+    .textContent = total;
+
+
+  if(total === 0){
+
+    document.getElementById("interestedPercent")
+      .textContent = "0%";
+
+    document.getElementById("recommendPercent")
+      .textContent = "0%";
+
+    return;
+
+  }
+
+
+  /*
+    INTERÉS
+  */
+
+  const interest =
+  countValues(
+    "q5",
+    [
+      "Sí, definitivamente",
+      "Probablemente sí",
+      "No estoy seguro/a",
+      "No"
+    ]
+  );
+
+
+  const interested =
+  interest["Sí, definitivamente"] +
+  interest["Probablemente sí"];
+
+
+  const interestedPercent =
+  Math.round(
+    interested / total * 100
+  );
+
+
+  document.getElementById("interestedPercent")
+    .textContent =
+    interestedPercent + "%";
+
+
+  /*
+    RECOMENDACIÓN
+  */
+
+  const recommend =
+  countValues(
+    "q19",
+    [
+      "Sí",
+      "Tal vez",
+      "No"
+    ]
+  );
+
+
+  const recommended =
+  recommend["Sí"];
+
+
+  const recommendPercent =
+  Math.round(
+    recommended / total * 100
+  );
+
+
+  document.getElementById("recommendPercent")
+    .textContent =
+    recommendPercent + "%";
+
+
+  /*
+    MAPA
+  */
+
+  const mapData =
+  countValues(
+    "q7",
+    [
+      "Muy importante",
+      "Importante",
+      "Poco importante",
+      "Nada importante"
+    ]
+  );
+
+
+  /*
+    360
+  */
+
+  const data360 =
+  countValues(
+    "q9",
+    [
+      "Excelente idea",
+      "Buena idea",
+      "Me da igual",
+      "No me interesa"
+    ]
+  );
+
+
+  crearGraficos(
+    interest,
+    recommend,
+    mapData,
+    data360
+  );
+
+}
+
+
+/* ==========================================
+   CONTAR RESPUESTAS
+========================================== */
+
+function countValues(
+  field,
+  values
+){
+
+  const result = {};
+
+  values.forEach(
+    value => result[value] = 0
+  );
+
+
+  responses.forEach(response => {
+
+    const value =
+    response[field];
+
+    if(
+      result.hasOwnProperty(value)
+    ){
+
+      result[value]++;
+
+    }
+
+  });
+
+
+  return result;
+
+}
+
+
+/* ==========================================
+   GRÁFICOS
+========================================== */
+
+function crearGraficos(
+  interest,
+  recommend,
+  mapData,
+  data360
+){
+
+
+  if(chartInterest)
+    chartInterest.destroy();
+
+  if(chartRecommend)
+    chartRecommend.destroy();
+
+  if(chartMap)
+    chartMap.destroy();
+
+  if(chart360)
+    chart360.destroy();
+
+
+  chartInterest =
+  new Chart(
+    document.getElementById("chartInterest"),
+    {
+
+      type:"doughnut",
+
+      data:{
+        labels:Object.keys(interest),
+
+        datasets:[{
+          data:Object.values(interest),
+
+          backgroundColor:[
+            "#6f4e37",
+            "#a47148",
+            "#d6b48a",
+            "#c7b9aa"
+          ]
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  chartRecommend =
+  new Chart(
+    document.getElementById("chartRecommend"),
+    {
+
+      type:"pie",
+
+      data:{
+        labels:Object.keys(recommend),
+
+        datasets:[{
+          data:Object.values(recommend),
+
+          backgroundColor:[
+            "#6f4e37",
+            "#d6b48a",
+            "#b89b7b"
+          ]
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  chartMap =
+  new Chart(
+    document.getElementById("chartMap"),
+    {
+
+      type:"bar",
+
+      data:{
+        labels:Object.keys(mapData),
+
+        datasets:[{
+
+          label:"Respuestas",
+
+          data:Object.values(mapData),
+
+          backgroundColor:"#8b5e3c",
+
+          borderRadius:8
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+
+        scales:{
+          y:{
+            beginAtZero:true,
+            ticks:{
+              precision:0
+            }
+          }
+        }
+
+      }
+
+    }
+  );
+
+
+  chart360 =
+  new Chart(
+    document.getElementById("chart360"),
+    {
+
+      type:"polarArea",
+
+      data:{
+        labels:Object.keys(data360),
+
+        datasets:[{
+
+          data:Object.values(data360),
+
+          backgroundColor:[
+            "#6f4e37",
+            "#a47148",
+            "#d6b48a",
+            "#c7b9aa"
+          ]
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+}
+
+
+/* ==========================================
+   INICIALIZACIÓN
+========================================== */
+
+updateProgress();
+
+</script>
+
+</body>
+</html>
